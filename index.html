@@ -1536,508 +1536,6 @@
 
 
 
-    // --- NOVA TELA: NOVA SOLICITAÇÃO (PRINT 1 / PRINT 2) ---
-
-    const NovaSolicitacaoPanel = ({ onClose }) => {
-
-      const [codEmp, setCodEmp] = React.useState('');
-
-      const [quadra, setQuadra] = React.useState('');
-
-      const [lote, setLote] = React.useState('');
-
-      const [searched, setSearched] = React.useState(false);
-
-      const [notFound, setNotFound] = React.useState(false);
-
-      const [destino, setDestino] = React.useState('');
-
-      const [justificativa, setJustificativa] = React.useState('');
-
-
-
-      const sanitizeDigits = (v) => v.replace(/\D/g, '');
-
-      const sanitizeQuadra = (v) => v.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-
-
-
-      const handlePesquisar = () => {
-
-        const e = (codEmp || '').trim();
-
-        const q = (quadra || '').trim();
-
-        const l = (lote || '').trim();
-
-
-
-        if (!e || !q || !l) return;
-
-
-
-        // Simulação do print: 06 / KW / 11
-
-        if (e === '06' && q === 'KW' && l === '11') {
-
-          setNotFound(false);
-
-          setSearched(true);
-
-          return;
-
-        }
-
-
-
-        setSearched(false);
-
-        setNotFound(true);
-
-      };
-
-
-
-      const handleVoltar = () => {
-
-        if (searched || notFound) {
-
-          setSearched(false);
-
-          setNotFound(false);
-
-          return;
-
-        }
-
-        onClose();
-
-      };
-
-
-
-      const canSearch = codEmp.length > 0 && quadra.length > 0 && lote.length > 0;
-
-
-
-      // Layout do PRINT 1
-
-      const SearchHeader = () => (
-
-        <div className="bg-white rounded shadow-sm border border-gray-200">
-
-          <div className="p-6">
-
-            <div className="grid grid-cols-12 gap-6 items-end">
-
-              <div className="col-span-12 md:col-span-2">
-
-                <label className="block text-[11px] font-bold text-gray-500 mb-1">Cód. empreendimento*</label>
-
-                <input
-
-                  value={codEmp}
-
-                  onChange={(e) => setCodEmp(sanitizeDigits(e.target.value))}
-
-                  inputMode="numeric"
-
-                  className="w-full border-b border-gray-300 focus:border-red-500 outline-none py-2 text-sm font-semibold text-gray-700"
-
-                  placeholder=""
-
-                />
-
-              </div>
-
-
-
-              <div className="col-span-12 md:col-span-6">
-
-                <label className="block text-[11px] font-bold text-red-500 mb-1">Empreendimento*</label>
-
-                <select className="w-full border-b border-gray-300 focus:border-red-500 outline-none py-2 text-sm text-gray-400 bg-transparent">
-
-                  <option> </option>
-
-                </select>
-
-              </div>
-
-
-
-              <div className="col-span-6 md:col-span-2">
-
-                <label className="block text-[11px] font-bold text-red-500 mb-1">Quadra*</label>
-
-                <input
-
-                  value={quadra}
-
-                  onChange={(e) => setQuadra(sanitizeQuadra(e.target.value))}
-
-                  className="w-full border-b border-gray-300 focus:border-red-500 outline-none py-2 text-sm font-semibold text-gray-700"
-
-                  placeholder=""
-
-                />
-
-              </div>
-
-
-
-              <div className="col-span-6 md:col-span-2">
-
-                <label className="block text-[11px] font-bold text-red-500 mb-1">Lote*</label>
-
-                <input
-
-                  value={lote}
-
-                  onChange={(e) => setLote(sanitizeDigits(e.target.value))}
-
-                  inputMode="numeric"
-
-                  className="w-full border-b border-gray-300 focus:border-red-500 outline-none py-2 text-sm font-semibold text-gray-700"
-
-                  placeholder=""
-
-                />
-
-              </div>
-
-            </div>
-
-
-
-            <div className="flex justify-end gap-3 mt-6">
-
-              <button
-
-                onClick={handleVoltar}
-
-                className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
-
-              >
-
-                VOLTAR
-
-              </button>
-
-              <button
-
-                onClick={handlePesquisar}
-
-                disabled={!canSearch}
-
-                className={`text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase ${canSearch ? 'bg-[#206bc4] hover:bg-[#1a56a0] text-white' : 'bg-blue-200 text-white cursor-not-allowed'}`}
-
-              >
-
-                PESQUISAR
-
-              </button>
-
-            </div>
-
-
-
-            {notFound && (
-
-              <div className="mt-4 text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded p-3">
-
-                Nenhum registro encontrado para o E/Q/L informado.
-
-              </div>
-
-            )}
-
-          </div>
-
-        </div>
-
-      );
-
-
-
-      // Layout do PRINT 2
-
-      const ResultPanel = () => (
-
-        <div className="bg-white rounded shadow-sm border border-gray-200">
-
-          <div className="p-6 space-y-6">
-
-            <div className="grid grid-cols-12 gap-6 items-end">
-
-              <div className="col-span-12 md:col-span-2">
-
-                <label className="block text-[11px] font-bold text-gray-500 mb-1">Cód. empreendim...</label>
-
-                <div className="py-2 text-sm font-bold text-gray-700 border-b border-gray-300">06</div>
-
-              </div>
-
-
-
-              <div className="col-span-12 md:col-span-6">
-
-                <label className="block text-[11px] font-bold text-gray-500 mb-1">Empreendimento*</label>
-
-                <select disabled className="w-full border-b border-gray-300 outline-none py-2 text-sm font-semibold text-gray-700 bg-transparent">
-
-                  <option>RIVIERA DE SANTA CRISTINA II</option>
-
-                </select>
-
-              </div>
-
-
-
-              <div className="col-span-6 md:col-span-2">
-
-                <label className="block text-[11px] font-bold text-gray-500 mb-1">Quadra*</label>
-
-                <div className="py-2 text-sm font-bold text-gray-700 border-b border-gray-300">KW</div>
-
-              </div>
-
-
-
-              <div className="col-span-6 md:col-span-2">
-
-                <label className="block text-[11px] font-bold text-gray-500 mb-1">Lote*</label>
-
-                <div className="py-2 text-sm font-bold text-gray-700 border-b border-gray-300">11</div>
-
-              </div>
-
-            </div>
-
-
-
-            <div className="flex justify-end gap-3">
-
-              <button
-
-                onClick={handleVoltar}
-
-                className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
-
-              >
-
-                VOLTAR
-
-              </button>
-
-              <button
-
-                disabled
-
-                className="bg-gray-200 text-gray-400 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase cursor-not-allowed"
-
-              >
-
-                PESQUISAR
-
-              </button>
-
-            </div>
-
-
-
-            <div className="grid grid-cols-12 gap-6">
-
-              <div className="col-span-12 lg:col-span-8">
-
-                <div className="bg-white rounded border border-gray-200 shadow-sm">
-
-                  <div className="p-6 space-y-6">
-
-                    <div>
-
-                      <div className="text-[12px] text-gray-500">Estado físico origem</div>
-
-                      <div className="text-sm font-bold text-gray-800 border-b border-dotted border-gray-300 pb-2 mt-1">1 - SEM PROBLEMAS</div>
-
-                    </div>
-
-
-
-                    <div>
-
-                      <div className="text-[12px] text-gray-500">Estado comprometimento origem</div>
-
-                      <div className="text-sm font-bold text-gray-800 border-b border-dotted border-gray-300 pb-2 mt-1">28 - Reserva para Recontratação</div>
-
-                    </div>
-
-
-
-                    <div>
-
-                      <div className="text-[12px] text-blue-600 font-semibold">Estado comprometimento de destino *</div>
-
-                      <select
-
-                        value={destino}
-
-                        onChange={(e) => setDestino(e.target.value)}
-
-                        className="w-full border border-gray-300 rounded px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-200 mt-2"
-
-                      >
-
-                        <option value=""> </option>
-
-                        <option value="28">28 - Reserva para Recontratação</option>
-
-                        <option value="30">30 - Disponível</option>
-
-                        <option value="31">31 - Bloqueado</option>
-
-                      </select>
-
-                    </div>
-
-
-
-                    <div>
-
-                      <div className="flex items-center justify-between">
-
-                        <div className="text-[12px] text-gray-500">Justificativa para alteração *</div>
-
-                        <div className="text-[11px] text-gray-400">{Math.min(justificativa.length, 100)}/100</div>
-
-                      </div>
-
-                      <textarea
-
-                        value={justificativa}
-
-                        onChange={(e) => setJustificativa(e.target.value.slice(0, 100))}
-
-                        className="w-full border-b border-gray-300 outline-none py-2 text-sm text-gray-700 mt-2 resize-none"
-
-                        rows="3"
-
-                      />
-
-                    </div>
-
-
-
-                    <div className="flex justify-end gap-3 pt-2">
-
-                      <button
-
-                        onClick={onClose}
-
-                        className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
-
-                      >
-
-                        CANCELAR
-
-                      </button>
-
-                      <button
-
-                        onClick={() => alert('✅ Simulação: Confirmado!')}
-
-                        className="bg-[#206bc4] hover:bg-[#1a56a0] text-white text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
-
-                      >
-
-                        CONFIRMAR
-
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-
-
-              <div className="col-span-12 lg:col-span-4">
-
-                <div className="bg-white rounded border border-gray-200 shadow-sm overflow-hidden">
-
-                  <div className="p-4 border-b border-gray-200 font-bold text-gray-800">Benfeitorias</div>
-
-                  <div className="p-4">
-
-                    <div className="grid grid-cols-4 text-[11px] font-bold text-gray-500 uppercase pb-2 border-b">
-
-                      <div>Código</div>
-
-                      <div className="col-span-2">Nome</div>
-
-                      <div className="text-right">%</div>
-
-                    </div>
-
-
-
-                    {[
-
-                      { codigo: '5', nome: 'COM ASFALTO', exc: 'N', pct: '0' },
-
-                      { codigo: '3', nome: 'COM REDE ELETRICA', exc: 'N', pct: '0' },
-
-                      { codigo: '2', nome: 'COM REDE HIDRAULICA', exc: 'N', pct: '0' },
-
-                    ].map((r, i) => (
-
-                      <div key={i} className="grid grid-cols-4 text-[12px] py-3 border-b last:border-b-0 items-center">
-
-                        <div className="font-bold text-gray-700">{r.codigo}</div>
-
-                        <div className="col-span-2 font-bold text-gray-800">{r.nome}</div>
-
-                        <div className="text-right font-bold text-gray-700">{r.pct}</div>
-
-                      </div>
-
-                    ))}
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-
-          </div>
-
-        </div>
-
-      );
-
-
-
-      return (
-
-        <div className="max-w-6xl mx-auto space-y-6">
-
-          {!searched ? <SearchHeader /> : <ResultPanel />}
-
-        </div>
-
-      );
-
-    };
-
-
-
     // --- VIEW 3: REATIVAÇÃO ---
 
     const ReativacaoView = ({ navigateTo, closeReativacao }) => {
@@ -2046,7 +1544,711 @@
 
       const [status, setStatus] = React.useState('Pendentes');
 
-      const [novaSolicitacaoOpen, setNovaSolicitacaoOpen] = React.useState(false);
+      const [novaOpen, setNovaOpen] = React.useState(false);
+
+
+
+      // --- NOVA TELA: NOVA SOLICITAÇÃO (PRINT 1 / PRINT 2) ---
+
+      const NovaSolicitacaoPanel = ({ onClose }) => {
+
+        // Mapa de empreendimentos (já deixei pronto pra você adicionar mais)
+
+        const EMPREENDIMENTOS = React.useMemo(() => ([
+
+          { code: "06", name: "RIVIERA DE SANTA CRISTINA II" },
+
+          // { code: "07", name: "OUTRO EMPREENDIMENTO..." },
+
+        ]), []);
+
+
+
+        const getEmpByCode = (code) => EMPREENDIMENTOS.find(e => e.code === code) || null;
+
+
+
+        const [codEmp, setCodEmp] = React.useState("");
+
+        const [empSelected, setEmpSelected] = React.useState(""); // guarda o code selecionado no select
+
+
+
+        const [quadra, setQuadra] = React.useState("");
+
+        const [lote, setLote] = React.useState("");
+
+
+
+        const [searched, setSearched] = React.useState(false);
+
+        const [notFound, setNotFound] = React.useState(false);
+
+
+
+        const [destino, setDestino] = React.useState("");
+
+        const [justificativa, setJustificativa] = React.useState("");
+
+
+
+        const sanitizeDigits = (v) => v.replace(/\D/g, "");
+
+        const sanitizeQuadra = (v) => v.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+
+
+
+        // 🔥 Sincroniza automaticamente: digitou o código -> seleciona o empreendimento no select
+
+        React.useEffect(() => {
+
+          const c = (codEmp || "").trim();
+
+          const found = getEmpByCode(c);
+
+          if (found) {
+
+            if (empSelected !== found.code) setEmpSelected(found.code);
+
+          } else {
+
+            // Se não achou, limpa o select (mas sem obrigar o usuário a "selecionar de novo")
+
+            if (empSelected !== "") setEmpSelected("");
+
+          }
+
+        }, [codEmp]); // eslint-disable-line react-hooks/exhaustive-deps
+
+
+
+        // Se escolher no select -> atualiza o código (sem duplicação chata)
+
+        const handleSelectEmp = (code) => {
+
+          setEmpSelected(code);
+
+          setCodEmp(code); // mantém “amarrado”
+
+        };
+
+
+
+        const handlePesquisar = () => {
+
+          const e = (codEmp || "").trim();
+
+          const q = (quadra || "").trim();
+
+          const l = (lote || "").trim();
+
+
+
+          if (!e || !q || !l) return;
+
+
+
+          // Simulação do print: 06 / KW / 11
+
+          if (e === "06" && q === "KW" && l === "11") {
+
+            setNotFound(false);
+
+            setSearched(true);
+
+            return;
+
+          }
+
+
+
+          setSearched(false);
+
+          setNotFound(true);
+
+        };
+
+
+
+        const handleVoltar = () => {
+
+          if (searched || notFound) {
+
+            setSearched(false);
+
+            setNotFound(false);
+
+            return;
+
+          }
+
+          onClose();
+
+        };
+
+
+
+        const canSearch =
+
+          codEmp.length > 0 &&
+
+          quadra.length > 0 &&
+
+          lote.length > 0 &&
+
+          !!getEmpByCode(codEmp); // garante que código existe no mapa
+
+
+
+        const empFound = getEmpByCode(codEmp);
+
+        const empName = empFound ? empFound.name : "";
+
+
+
+        // Layout do PRINT 1
+
+        const SearchHeader = () => (
+
+          <div className="bg-white rounded shadow-sm border border-gray-200">
+
+            <div className="p-6">
+
+              <div className="grid grid-cols-12 gap-6 items-end">
+
+                <div className="col-span-12 md:col-span-2">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Cód. empreendimento<span className="text-gray-400">*</span>
+
+                  </label>
+
+                  <input
+
+                    value={codEmp}
+
+                    onChange={(e) => setCodEmp(sanitizeDigits(e.target.value))}
+
+                    inputMode="numeric"
+
+                    className="w-full border-b border-gray-300 focus:border-[#0056b3] outline-none py-2 text-sm font-semibold text-gray-700"
+
+                    placeholder=""
+
+                  />
+
+                </div>
+
+
+
+                <div className="col-span-12 md:col-span-6">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Empreendimento<span className="text-gray-400">*</span>
+
+                  </label>
+
+
+
+                  <select
+
+                    value={empSelected}
+
+                    onChange={(e) => handleSelectEmp(e.target.value)}
+
+                    className="w-full border-b border-gray-300 focus:border-[#0056b3] outline-none py-2 text-sm font-semibold text-gray-700 bg-transparent"
+
+                  >
+
+                    <option value="">Selecione...</option>
+
+                    {EMPREENDIMENTOS.map((e) => (
+
+                      <option key={e.code} value={e.code}>
+
+                        {e.name}
+
+                      </option>
+
+                    ))}
+
+                  </select>
+
+
+
+                  {/* Linha “fantasma” do sistema (opcional): mostra o nome encontrado quando digita o código */}
+
+                  {empName && (
+
+                    <div className="mt-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+
+                      {empName}
+
+                    </div>
+
+                  )}
+
+                </div>
+
+
+
+                <div className="col-span-6 md:col-span-2">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Quadra<span className="text-gray-400">*</span>
+
+                  </label>
+
+                  <input
+
+                    value={quadra}
+
+                    onChange={(e) => setQuadra(sanitizeQuadra(e.target.value))}
+
+                    className="w-full border-b border-gray-300 focus:border-[#0056b3] outline-none py-2 text-sm font-semibold text-gray-700"
+
+                    placeholder=""
+
+                  />
+
+                </div>
+
+
+
+                <div className="col-span-6 md:col-span-2">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Lote<span className="text-gray-400">*</span>
+
+                  </label>
+
+                  <input
+
+                    value={lote}
+
+                    onChange={(e) => setLote(sanitizeDigits(e.target.value))}
+
+                    inputMode="numeric"
+
+                    className="w-full border-b border-gray-300 focus:border-[#0056b3] outline-none py-2 text-sm font-semibold text-gray-700"
+
+                    placeholder=""
+
+                  />
+
+                </div>
+
+              </div>
+
+
+
+              <div className="flex justify-end gap-3 mt-6">
+
+                <button
+
+                  onClick={handleVoltar}
+
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
+
+                >
+
+                  VOLTAR
+
+                </button>
+
+
+
+                <button
+
+                  onClick={handlePesquisar}
+
+                  disabled={!canSearch}
+
+                  className={`text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase ${
+
+                    canSearch
+
+                      ? "bg-[#206bc4] hover:bg-[#1a56a0] text-white"
+
+                      : "bg-blue-200 text-white cursor-not-allowed"
+
+                  }`}
+
+                >
+
+                  PESQUISAR
+
+                </button>
+
+              </div>
+
+
+
+              {!getEmpByCode(codEmp) && codEmp.length > 0 && (
+
+                <div className="mt-4 text-xs font-bold text-gray-600 bg-gray-50 border border-gray-200 rounded p-3">
+
+                  Código de empreendimento não encontrado (ainda). Ex.: <span className="font-black">06</span>
+
+                </div>
+
+              )}
+
+
+
+              {notFound && (
+
+                <div className="mt-4 text-xs font-bold text-gray-600 bg-gray-50 border border-gray-200 rounded p-3">
+
+                  Nenhum registro encontrado para o E/Q/L informado.
+
+                </div>
+
+              )}
+
+            </div>
+
+          </div>
+
+        );
+
+
+
+        // Layout do PRINT 2 (resultado)
+
+        const ResultPanel = () => (
+
+          <div className="bg-white rounded shadow-sm border border-gray-200">
+
+            <div className="p-6 space-y-6">
+
+              <div className="grid grid-cols-12 gap-6 items-end">
+
+                <div className="col-span-12 md:col-span-2">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Cód. empreendim...
+
+                  </label>
+
+                  <div className="py-2 text-sm font-bold text-gray-700 border-b border-gray-300">
+
+                    {codEmp || "06"}
+
+                  </div>
+
+                </div>
+
+
+
+                <div className="col-span-12 md:col-span-6">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Empreendimento<span className="text-gray-400">*</span>
+
+                  </label>
+
+                  <select
+
+                    disabled
+
+                    className="w-full border-b border-gray-300 outline-none py-2 text-sm font-semibold text-gray-700 bg-transparent"
+
+                    value={empFound ? empFound.code : "06"}
+
+                    onChange={() => {}}
+
+                  >
+
+                    <option value="06">RIVIERA DE SANTA CRISTINA II</option>
+
+                  </select>
+
+                </div>
+
+
+
+                <div className="col-span-6 md:col-span-2">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Quadra<span className="text-gray-400">*</span>
+
+                  </label>
+
+                  <div className="py-2 text-sm font-bold text-gray-700 border-b border-gray-300">
+
+                    {quadra || "KW"}
+
+                  </div>
+
+                </div>
+
+
+
+                <div className="col-span-6 md:col-span-2">
+
+                  <label className="block text-[11px] font-bold text-gray-500 mb-1">
+
+                    Lote<span className="text-gray-400">*</span>
+
+                  </label>
+
+                  <div className="py-2 text-sm font-bold text-gray-700 border-b border-gray-300">
+
+                    {lote || "11"}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+
+              <div className="flex justify-end gap-3">
+
+                <button
+
+                  onClick={handleVoltar}
+
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
+
+                >
+
+                  VOLTAR
+
+                </button>
+
+
+
+                <button
+
+                  disabled
+
+                  className="bg-gray-200 text-gray-400 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase cursor-not-allowed"
+
+                >
+
+                  PESQUISAR
+
+                </button>
+
+              </div>
+
+
+
+              <div className="grid grid-cols-12 gap-6">
+
+                <div className="col-span-12 lg:col-span-8">
+
+                  <div className="bg-white rounded border border-gray-200 shadow-sm">
+
+                    <div className="p-6 space-y-6">
+
+                      <div>
+
+                        <div className="text-[12px] text-gray-500">Estado físico origem</div>
+
+                        <div className="text-sm font-bold text-gray-800 border-b border-dotted border-gray-300 pb-2 mt-1">
+
+                          1 - SEM PROBLEMAS
+
+                        </div>
+
+                      </div>
+
+
+
+                      <div>
+
+                        <div className="text-[12px] text-gray-500">Estado comprometimento origem</div>
+
+                        <div className="text-sm font-bold text-gray-800 border-b border-dotted border-gray-300 pb-2 mt-1">
+
+                          28 - Reserva para Recontratação
+
+                        </div>
+
+                      </div>
+
+
+
+                      <div>
+
+                        <div className="text-[12px] text-gray-600 font-semibold">
+
+                          Estado comprometimento de destino<span className="text-gray-400">*</span>
+
+                        </div>
+
+                        <select
+
+                          value={destino}
+
+                          onChange={(e) => setDestino(e.target.value)}
+
+                          className="w-full border border-gray-300 rounded px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-200 mt-2"
+
+                        >
+
+                          <option value=""> </option>
+
+                          <option value="28">28 - Reserva para Recontratação</option>
+
+                          <option value="30">30 - Disponível</option>
+
+                          <option value="31">31 - Bloqueado</option>
+
+                        </select>
+
+                      </div>
+
+
+
+                      <div>
+
+                        <div className="flex items-center justify-between">
+
+                          <div className="text-[12px] text-gray-500">
+
+                            Justificativa para alteração<span className="text-gray-400">*</span>
+
+                          </div>
+
+                          <div className="text-[11px] text-gray-400">{Math.min(justificativa.length, 100)}/100</div>
+
+                        </div>
+
+                        <textarea
+
+                          value={justificativa}
+
+                          onChange={(e) => setJustificativa(e.target.value.slice(0, 100))}
+
+                          className="w-full border-b border-gray-300 outline-none py-2 text-sm text-gray-700 mt-2 resize-none focus:border-[#0056b3]"
+
+                          rows="3"
+
+                        />
+
+                      </div>
+
+
+
+                      <div className="flex justify-end gap-3 pt-2">
+
+                        <button
+
+                          onClick={onClose}
+
+                          className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
+
+                        >
+
+                          CANCELAR
+
+                        </button>
+
+                        <button
+
+                          onClick={() => alert("✅ Simulação: Confirmado!")}
+
+                          className="bg-[#206bc4] hover:bg-[#1a56a0] text-white text-[12px] font-bold px-6 py-2 rounded shadow-sm uppercase"
+
+                        >
+
+                          CONFIRMAR
+
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+
+                <div className="col-span-12 lg:col-span-4">
+
+                  <div className="bg-white rounded border border-gray-200 shadow-sm overflow-hidden">
+
+                    <div className="p-4 border-b border-gray-200 font-bold text-gray-800">Benfeitorias</div>
+
+                    <div className="p-4">
+
+                      <div className="grid grid-cols-4 text-[11px] font-bold text-gray-500 uppercase pb-2 border-b">
+
+                        <div>Código</div>
+
+                        <div className="col-span-2">Nome</div>
+
+                        <div className="text-right">%</div>
+
+                      </div>
+
+
+
+                      {[
+
+                        { codigo: "5", nome: "COM ASFALTO", pct: "0" },
+
+                        { codigo: "3", nome: "COM REDE ELETRICA", pct: "0" },
+
+                        { codigo: "2", nome: "COM REDE HIDRAULICA", pct: "0" },
+
+                      ].map((r, i) => (
+
+                        <div key={i} className="grid grid-cols-4 text-[12px] py-3 border-b last:border-b-0 items-center">
+
+                          <div className="font-bold text-gray-700">{r.codigo}</div>
+
+                          <div className="col-span-2 font-bold text-gray-800">{r.nome}</div>
+
+                          <div className="text-right font-bold text-gray-700">{r.pct}</div>
+
+                        </div>
+
+                      ))}
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+
+            </div>
+
+          </div>
+
+        );
+
+
+
+        return (
+
+          <div className="max-w-6xl mx-auto space-y-6">
+
+            {!searched ? <SearchHeader /> : <ResultPanel />}
+
+          </div>
+
+        );
+
+      };
 
 
 
@@ -2132,7 +2334,7 @@
 
                       key={tab}
 
-                      onClick={() => { setActiveTab(tab); setNovaSolicitacaoOpen(false); }}
+                      onClick={() => setActiveTab(tab)}
 
                       className={`px-8 py-3 text-[11px] font-bold tracking-wider transition-all border-b-2 ${activeTab === tab ? 'text-blue-600 border-blue-600 bg-white' : 'text-gray-400 border-transparent hover:text-gray-600'}`}
 
@@ -2150,122 +2352,125 @@
 
                 <div className="p-8 space-y-8">
 
-                  {/* Quando clicar NOVO em SOLICITAÇÕES, abre o painel (prints 1/2) */}
-                  {activeTab === 'SOLICITAÇÕES' && novaSolicitacaoOpen ? (
+                  <div className="flex items-center gap-4 text-[13px]">
 
-                    <NovaSolicitacaoPanel onClose={() => setNovaSolicitacaoOpen(false)} />
+                    <span className="font-bold text-gray-700">Status:</span>
 
-                  ) : (
+                    <div className="flex items-center gap-6">
 
-                    <>
+                      {['Pendentes', 'Aprovados', 'Reprovados'].map(opt => (
 
-                      <div className="flex items-center gap-4 text-[13px]">
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer group">
 
-                        <span className="font-bold text-gray-700">Status:</span>
+                          <input
 
-                        <div className="flex items-center gap-6">
+                            type="radio"
 
-                          {['Pendentes', 'Aprovados', 'Reprovados'].map(opt => (
+                            name="status"
 
-                            <label key={opt} className="flex items-center gap-2 cursor-pointer group">
+                            checked={status === opt}
 
-                              <input
+                            onChange={() => setStatus(opt)}
 
-                                type="radio"
+                            className="custom-radio"
 
-                                name="status"
+                          />
 
-                                checked={status === opt}
+                          <span className={`${status === opt ? 'text-gray-900 font-semibold' : 'text-gray-500'}`}>{opt}</span>
 
-                                onChange={() => setStatus(opt)}
+                        </label>
 
-                                className="custom-radio"
+                      ))}
 
-                              />
+                    </div>
 
-                              <span className={`${status === opt ? 'text-gray-900 font-semibold' : 'text-gray-500'}`}>{opt}</span>
+                  </div>
 
-                            </label>
 
-                          ))}
 
-                        </div>
+                  <div className="border-t pt-4">
+
+                    <table className="w-full text-left">
+
+                      <thead>
+
+                        <tr className="text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b">
+
+                          <th className="pb-3">Número</th>
+
+                          <th className="pb-3">E</th>
+
+                          <th className="pb-3">Q</th>
+
+                          <th className="pb-3">L</th>
+
+                          <th className="pb-3">Código</th>
+
+                          <th className="pb-3">Benfeitoria</th>
+
+                          <th className="pb-3">Incl./Excl.</th>
+
+                          <th className="pb-3 text-right">Data Venda</th>
+
+                        </tr>
+
+                      </thead>
+
+                      <tbody>
+
+                        <tr>
+
+                          <td colSpan="8" className="py-20 text-center text-gray-400 italic text-sm">
+
+                            Nenhum registro encontrado
+
+                          </td>
+
+                        </tr>
+
+                      </tbody>
+
+                    </table>
+
+                  </div>
+
+
+
+                  <div className="flex justify-end pt-4 border-t">
+
+                    <button
+
+                      onClick={() => setNovaOpen(true)}
+
+                      className="bg-[#206bc4] hover:bg-[#1a56a0] text-white text-[11px] font-bold px-6 py-2 rounded uppercase tracking-widest shadow-sm transition-all"
+
+                    >
+
+                      Novo
+
+                    </button>
+
+                  </div>
+
+
+
+                  {/* Modal/Tela da Nova Solicitação */}
+
+                  {novaOpen && (
+
+                    <div className="fixed inset-0 z-[120] bg-black/40 flex items-center justify-center p-6">
+
+                      <div className="w-full max-w-6xl">
+
+                        <NovaSolicitacaoPanel onClose={() => setNovaOpen(false)} />
 
                       </div>
 
-
-
-                      <div className="border-t pt-4">
-
-                        <table className="w-full text-left">
-
-                          <thead>
-
-                            <tr className="text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b">
-
-                              <th className="pb-3">Número</th>
-
-                              <th className="pb-3">E</th>
-
-                              <th className="pb-3">Q</th>
-
-                              <th className="pb-3">L</th>
-
-                              <th className="pb-3">Código</th>
-
-                              <th className="pb-3">Benfeitoria</th>
-
-                              <th className="pb-3">Incl./Excl.</th>
-
-                              <th className="pb-3 text-right">Data Venda</th>
-
-                            </tr>
-
-                          </thead>
-
-                          <tbody>
-
-                            <tr>
-
-                              <td colSpan="8" className="py-20 text-center text-gray-400 italic text-sm">
-
-                                Nenhum registro encontrado
-
-                              </td>
-
-                            </tr>
-
-                          </tbody>
-
-                        </table>
-
-                      </div>
-
-
-
-                      <div className="flex justify-end pt-4 border-t">
-
-                        <button
-
-                          onClick={() => {
-
-                            if (activeTab === 'SOLICITAÇÕES') setNovaSolicitacaoOpen(true);
-
-                          }}
-
-                          className="bg-[#206bc4] hover:bg-[#1a56a0] text-white text-[11px] font-bold px-6 py-2 rounded uppercase tracking-widest shadow-sm transition-all"
-
-                        >
-
-                          Novo
-
-                        </button>
-
-                      </div>
-
-                    </>
+                    </div>
 
                   )}
+
+
 
                 </div>
 
